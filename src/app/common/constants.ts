@@ -1,4 +1,4 @@
-export const AppConstants = {
+export const Constants = {
   logLevel: {
     silly: 'silly',
     verbose: 'verbose',

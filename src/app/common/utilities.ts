@@ -1,8 +1,8 @@
-import { AppConstants } from '@app/app-constants';
+import { Constants } from '@app/common/constants';
 
-export class AppUtils {
+export class Utilities {
 
-  static logMsg(msg: any, logLevel: string = AppConstants.logLevel.silly): void {
+  static logMsg(msg: any, logLevel: string = Constants.logLevel.silly): void {
     console[logLevel](
       this.getLogTimestamp(new Date()) + ' [' + logLevel + '] ' + msg
     );
