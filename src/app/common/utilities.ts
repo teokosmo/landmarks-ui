@@ -2,7 +2,7 @@ import { Constants } from '@app/common/constants';
 
 export class Utilities {
 
-  static logMsg(msg: any, logLevel: string = Constants.logLevel.silly): void {
+  static logMsg(msg: any, logLevel: string = Constants.logLevel.log): void {
     console[logLevel](
       this.getLogTimestamp(new Date()) + ' [' + logLevel + '] ' + msg
     );
@@ -26,4 +26,9 @@ export class Utilities {
     }
     return x;
   }
+
+  static isDefined(variable: any): boolean {
+    return variable != null;
+  }
+
 }

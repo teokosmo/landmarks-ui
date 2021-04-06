@@ -7,5 +7,5 @@ export const environment = {
     bootstrap: 'Bootstrap 4.5.3',
     fontawesome: 'Font Awesome 5.15.1',
   },
-  landmarksServerUrl: 'http://localhost:1337/parse'
+  landmarksServerBaseUrl: 'http://localhost:1337/parse'
 };

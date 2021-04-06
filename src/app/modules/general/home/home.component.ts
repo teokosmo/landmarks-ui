@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../../../environments/environment';
+import { ApiLandmarksService } from '@app/services/api';
+import { environment } from '@env/environment';
+import { GetLandmarksResponse } from '@app/models';
+import { Utilities } from '@app/common/utilities';
+import { Constants } from '../../../common/constants';
 
 @Component({
   selector: 'app-home',
@@ -13,9 +17,19 @@ export class HomeComponent implements OnInit {
   bootstrap = environment.application.bootstrap;
   fontawesome = environment.application.fontawesome;
 
-  constructor() { }
+  constructor(private apiLandmarksService: ApiLandmarksService) { }
 
   ngOnInit(): void {
+    this.apiLandmarksService.getLandmarks().subscribe(
+      (getLandmarksResponse: GetLandmarksResponse) => {
+        getLandmarksResponse.results.forEach(landmark => {
+          Utilities.logMsg(`HomeComponent.ngOnInit: ${landmark.title})`);
+        });
+      },
+      (err) => {
+        Utilities.logMsg(`HomeComponent.ngOnInit: ${err.message})`, Constants.logLevel.error);
+      }
+    );
   }
 
 }
