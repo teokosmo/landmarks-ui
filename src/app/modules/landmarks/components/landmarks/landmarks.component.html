@@ -1,1 +1,5 @@
-<p>landmarks works!</p>
+<ng-container *ngIf="(landMarks$ | async) as landmarks;">
+  <ng-container *ngFor="let landmark of landmarks.results; let j = index; trackBy: trackLandmarks">
+    <a [routerLink]="'/landmark/' + landmark.objectId">{{ j }}) {{ landmark.title }} </a><br/>
+  </ng-container>
+</ng-container>

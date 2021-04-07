@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LandmarksComponent } from './components/landmarks/landmarks.component';
+import { NotFoundComponent } from '@app/modules/general/not-found/not-found.component';
 import { LandmarkDetailsComponent } from './components/landmark-details/landmark-details.component';
 
 const routes: Routes = [
   { path: 'landmark/:objectId', component: LandmarkDetailsComponent},
+  { path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({

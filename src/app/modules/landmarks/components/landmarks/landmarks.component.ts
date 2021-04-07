@@ -3,6 +3,7 @@ import { Constants } from '@app/common/constants';
 import { Utilities } from '@app/common/utilities';
 import { GetLandmarksResponse } from '@app/models';
 import { ApiLandmarksService } from '@app/services/api';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-landmarks',
@@ -13,17 +14,14 @@ export class LandmarksComponent implements OnInit {
 
   constructor(private apiLandmarksService: ApiLandmarksService) { }
 
+  landMarks$: Observable<GetLandmarksResponse>;
+
   ngOnInit(): void {
-    this.apiLandmarksService.getLandmarks().subscribe(
-      (getLandmarksResponse: GetLandmarksResponse) => {
-        getLandmarksResponse.results.forEach(landmark => {
-          Utilities.logMsg(`LandmarksComponent.ngOnInit: ${landmark.title}`);
-        });
-      },
-      (err) => {
-        Utilities.logMsg(`LandmarksComponent.ngOnInit: ${err.message})`, Constants.logLevel.error);
-      }
-    );
+    this.landMarks$ = this.apiLandmarksService.getLandmarks();
+  }
+
+  trackLandmarks(index, dataItem): void {
+    return dataItem ? dataItem.objectId : undefined;
   }
 
 }

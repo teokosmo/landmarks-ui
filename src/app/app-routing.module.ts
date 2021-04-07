@@ -27,7 +27,7 @@ const routes: Routes = [
     loadChildren: () => import('./modules/general/signin/signin.module')
       .then(mod => mod.SigninModule)
   },
-  { path: '**', component: NotFoundComponent }
+  // { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
