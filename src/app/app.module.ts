@@ -7,6 +7,7 @@ import { NotFoundComponent } from './modules/general/not-found/not-found.compone
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ApiLandmarksInterceptor } from '@app/interceptors';
+import { LandmarksModule } from './modules/landmarks/landmarks.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { ApiLandmarksInterceptor } from '@app/interceptors';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    LandmarksModule,
   ],
   providers: [
     {

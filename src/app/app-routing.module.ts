@@ -3,9 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './modules/general/home/home.component';
 import { NotFoundComponent } from './modules/general/not-found/not-found.component';
+import { LandmarksComponent } from './modules/landmarks/components/landmarks/landmarks.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, },
+  { path: '', component: LandmarksComponent, },
   {
     path: 'bootstrap-prototype',
     loadChildren: () => import('./modules/application/example-bootstrap-prototype/example-bootstrap-prototype.module')
