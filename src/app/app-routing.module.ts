@@ -27,6 +27,7 @@ const routes: Routes = [
     loadChildren: () => import('./modules/general/signin/signin.module')
       .then(mod => mod.SigninModule)
   },
+  { path: 'login', loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule) },
   // { path: '**', component: NotFoundComponent }
 ];
 

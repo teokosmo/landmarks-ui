@@ -1,4 +1,4 @@
 export class AppVariables {
-  static userName = '';
+  static username = '';
   static userSessionToken = '';
 }
