@@ -30,8 +30,7 @@ export class LoginComponent implements OnInit {
     this.apiUserService.login(this.formControls.username.value, this.formControls.password.value)
       .subscribe((loginResponse: GetLoginResponse) => {
         if (Utilities.isDefined(loginResponse.sessionToken)) {
-          AppVariables.username = loginResponse.username;
-          AppVariables.userSessionToken = loginResponse.sessionToken;
+          Utilities.setUserSessionData(loginResponse.username, loginResponse.sessionToken);
           this.router.navigateByUrl('');
         } else {
           this.loginErrorMessage = 'Authentication failed.';

@@ -36,4 +36,14 @@ export class Utilities {
     return AppVariables.userSessionToken !== '';
   }
 
+  static setUserSessionData(username, sessionToken): void {
+    AppVariables.username = username;
+    AppVariables.userSessionToken = sessionToken;
+  }
+
+  static clearUserSessionData(): void {
+    AppVariables.username = '';
+    AppVariables.userSessionToken = '';
+  }
+
 }

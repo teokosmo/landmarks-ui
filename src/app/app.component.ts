@@ -3,6 +3,7 @@ import { Utilities } from './common/utilities';
 import { AppVariables } from './common/app-variables';
 import { ApiUserService } from './services/api/api-user.service';
 import { Constants } from '@app/common/constants';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -13,13 +14,13 @@ export class AppComponent {
   utils = Utilities;
   appvars = AppVariables;
 
-  constructor(private apiUserService: ApiUserService) {}
+  constructor(private apiUserService: ApiUserService, private router: Router) {}
 
   logUserOut(): void {
     this.apiUserService.logout()
       .subscribe(() => {
-        AppVariables.username = '';
-        AppVariables.userSessionToken = '';
+        Utilities.clearUserSessionData();
+        this.router.navigateByUrl('/login');
       },
       (err) => {
         Utilities.logMsg(err.message, Constants.logLevel.error);
