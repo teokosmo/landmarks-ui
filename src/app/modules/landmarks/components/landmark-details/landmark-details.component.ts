@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Landmark } from '@app/models';
 import { ApiLandmarksService } from '@app/services/api';
 import { Observable } from 'rxjs';
+import { Utilities } from '@app/common/utilities';
 
 @Component({
   selector: 'app-landmark-details',
@@ -15,6 +16,7 @@ export class LandmarkDetailsComponent implements OnInit {
 
   landmarkObjectId: string;
   landmark$: Observable<Landmark>;
+  utils = Utilities;
 
   ngOnInit(): void {
     this.landmarkObjectId = this.route.snapshot.paramMap.get('objectId');
