@@ -1,4 +1,5 @@
 import { Constants } from '@app/common/constants';
+import { AppVariables } from './app-variables';
 
 export class Utilities {
 
@@ -29,6 +30,10 @@ export class Utilities {
 
   static isDefined(variable: any): boolean {
     return variable != null;
+  }
+
+  static isUserLoggedIn(): boolean {
+    return AppVariables.userSessionToken !== '';
   }
 
 }

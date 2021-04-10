@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router} from '@angular/router';
 import { Observable } from 'rxjs';
-import { AppVariables } from '@app/common/app-variables';
+import { Utilities } from '@app/common/utilities';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class CanActivateRouteGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree>
   {
-    if (AppVariables.userSessionToken === '') {
+    if (!Utilities.isUserLoggedIn()) {
       return this.router.parseUrl('/login');
     } else {
       return true;
