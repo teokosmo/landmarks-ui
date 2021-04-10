@@ -27,4 +27,14 @@ export class ApiUserService {
       }
     );
   }
+
+  public logout(): Observable<{}> {
+    return this.httpClient.post<{}> (
+      `${environment.landmarksServerBaseUrl}/logout`,
+      {
+        observe: 'body',
+        reportProgress: false
+      }
+    );
+  }
 }
