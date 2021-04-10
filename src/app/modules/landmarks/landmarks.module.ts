@@ -5,10 +5,11 @@ import { LandmarksRoutingModule } from './landmarks-routing.module';
 import { LandmarksComponent } from './components/landmarks/landmarks.component';
 import { LandmarkDetailsComponent } from './components/landmark-details/landmark-details.component';
 import { AgmCoreModule } from '@agm/core';
+import { LandmarkEditComponent } from './components/landmark-edit/landmark-edit.component';
 
 
 @NgModule({
-  declarations: [LandmarksComponent, LandmarkDetailsComponent],
+  declarations: [LandmarksComponent, LandmarkDetailsComponent, LandmarkEditComponent],
   imports: [
     CommonModule,
     LandmarksRoutingModule,
