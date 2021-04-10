@@ -1,5 +1,8 @@
 <ng-container *ngIf="(landmark$ | async) as landmark;">
-  <h2> {{ landmark.title }} <a *ngIf="utils.isUserLoggedIn()" [routerLink]="'edit'"><i class="fas fa-pencil-alt mr-1"></i></a></h2>
+  <div class="clearfix">
+    <h2 class="float-left">{{ landmark.title }}</h2>
+    <a *ngIf="utils.isUserLoggedIn()" [routerLink]="'edit'" class="btn btn-primary float-right"><i class="fas fa-pencil-alt mr-1"></i> Edit</a>
+  </div>
   <p> {{ landmark.description }} </p>
   <agm-map *ngIf="landmark.location" [latitude]="landmark.location[1]" [longitude]="landmark.location[0]" [zoom]="15">
     <agm-marker [latitude]="landmark.location[1]" [longitude]="landmark.location[0]"></agm-marker>
