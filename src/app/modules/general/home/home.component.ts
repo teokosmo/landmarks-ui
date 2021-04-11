@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiLandmarksService } from '@app/services/api';
 import { environment } from '@env/environment';
-import { GetLandmarksResponse } from '@app/models';
+import { IGetLandmarksResponse } from '@app/models';
 import { Utilities } from '@app/common/utilities';
 import { Constants } from '../../../common/constants';
 
@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.apiLandmarksService.getLandmarks().subscribe(
-      (getLandmarksResponse: GetLandmarksResponse) => {
+      (getLandmarksResponse: IGetLandmarksResponse) => {
         getLandmarksResponse.results.forEach(landmark => {
           Utilities.logMsg(`HomeComponent.ngOnInit: ${landmark.title})`);
         });

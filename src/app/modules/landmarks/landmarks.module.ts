@@ -6,12 +6,15 @@ import { LandmarksComponent } from './components/landmarks/landmarks.component';
 import { LandmarkDetailsComponent } from './components/landmark-details/landmark-details.component';
 import { AgmCoreModule } from '@agm/core';
 import { LandmarkEditComponent } from './components/landmark-edit/landmark-edit.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [LandmarksComponent, LandmarkDetailsComponent, LandmarkEditComponent],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     LandmarksRoutingModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAxUsvOZIxk8Tnm9UsbLJvU8on1aXZsRho'

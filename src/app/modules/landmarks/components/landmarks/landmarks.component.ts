@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Constants } from '@app/common/constants';
 import { Utilities } from '@app/common/utilities';
-import { GetLandmarksResponse } from '@app/models';
+import { IGetLandmarksResponse } from '@app/models';
 import { ApiLandmarksService } from '@app/services/api';
 import { Observable } from 'rxjs';
 
@@ -14,7 +14,7 @@ export class LandmarksComponent implements OnInit {
 
   constructor(private apiLandmarksService: ApiLandmarksService) { }
 
-  landMarks$: Observable<GetLandmarksResponse>;
+  landMarks$: Observable<IGetLandmarksResponse>;
 
   ngOnInit(): void {
     this.landMarks$ = this.apiLandmarksService.getLandmarks();

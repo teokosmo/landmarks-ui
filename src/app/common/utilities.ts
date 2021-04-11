@@ -1,4 +1,5 @@
 import { Constants } from '@app/common/constants';
+import { environment } from '@env/environment';
 import { AppVariables } from './app-variables';
 
 export class Utilities {
@@ -33,7 +34,7 @@ export class Utilities {
   }
 
   static isUserLoggedIn(): boolean {
-    return AppVariables.userSessionToken !== '';
+    return AppVariables.userSessionToken !== ''/*  || !environment.production */;
   }
 
   static setUserSessionData(username, sessionToken): void {
