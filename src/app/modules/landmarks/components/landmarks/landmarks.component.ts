@@ -17,7 +17,8 @@ export class LandmarksComponent implements OnInit {
   landMarks$: Observable<IGetLandmarksResponse>;
 
   ngOnInit(): void {
-    this.landMarks$ = this.apiLandmarksService.getLandmarks();
+    const orderByField = 'order';
+    this.landMarks$ = this.apiLandmarksService.getLandmarks(orderByField);
   }
 
   trackLandmarks(index, dataItem): void {

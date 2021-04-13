@@ -1,5 +1,18 @@
-<ng-container *ngIf="(landMarks$ | async) as landmarks;">
-  <ng-container *ngFor="let landmark of landmarks.results; let j = index; trackBy: trackLandmarks">
-    <a [routerLink]="'/landmark/' + landmark.objectId">{{ j }}) {{ landmark.title }} </a><br/>
-  </ng-container>
-</ng-container>
+<div class="row justify-content-center p-2">
+  <div class="col-lg-8 mx-auto">
+    <ul class="list-group shadow">
+      <ng-container *ngIf="(landMarks$ | async) as landmarks;">
+        <ng-container *ngFor="let landmark of landmarks.results; let j = index; trackBy: trackLandmarks">
+          <li class="list-group-item">
+            <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+              <div class="media-body align-self-start order-2 order-lg-2">
+                <h5 class="mt-0 font-weight-bold mb-2"><a [routerLink]="'/landmark/' + landmark.objectId"> {{ landmark.title }} </a></h5>
+                <p class="font-italic mb-0">{{ landmark.short_info }}</p>
+              </div><img class="mr-lg-5 order-1 order-lg-1 img-thumbnail" [src]="(landmark.photo_thumb ? landmark.photo_thumb.url : 'assets/params/images/logo/ganatan.png')" alt="Generic placeholder image" width="200">
+            </div>
+          </li>
+        </ng-container>
+      </ng-container>
+    </ul>
+  </div>
+</div>

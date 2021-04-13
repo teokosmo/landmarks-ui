@@ -2,6 +2,19 @@ body {
   padding-top: 5rem;
   color: black;
   font-weight: 400;
+  background: #fafafa;
+}
+
+a {
+  color:#2196f3;
+}
+a:hover {
+  color: #2196f3;
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #00a7bf;
 }
 
 .navbar {

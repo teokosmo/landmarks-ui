@@ -1,10 +1,24 @@
-<ng-container *ngIf="(landmark$ | async) as landmark;">
-  <div class="clearfix">
-    <h2 class="float-left">{{ landmark.title }}</h2>
-    <a *ngIf="utils.isUserLoggedIn()" [routerLink]="'edit'" class="btn btn-primary float-right"><i class="fas fa-pencil-alt mr-1"></i> Edit</a>
+<div class="row justify-content-center p-2">
+  <div class="col-lg-8 mx-auto">
+    <ng-container *ngIf="(landmark$ | async) as landmark;">
+      <div class="d-flex justify-content-between my-4">
+        <div></div>
+        <h1 class="font-weight-bold">{{ landmark.title }}</h1>
+        <div class="align-self-center"><a *ngIf="utils.isUserLoggedIn()" [routerLink]="'edit'" class="btn btn-primary"><i class="fas fa-pencil-alt mr-1"></i> Edit</a></div>
+      </div>
+      <div class="float-left">
+        <a *ngIf="landmark.photo_thumb" target="_blank" [href]="landmark.photo.url"><img class="mr-3 img-thumbnail" [src]="landmark.photo_thumb.url" alt="Generic placeholder image" width="200"></a>
+        <img *ngIf="!landmark.photo_thumb" class="mr-3 img-thumbnail" src="assets/params/images/logo/ganatan.png" alt="Generic placeholder image" width="200">
+      </div>
+      <p class="">{{ landmark.short_info }}</p>
+      <p>{{ landmark.description }}</p>
+      <div class="d-flex justify-content-end">
+        <a class="font-weight-bold" [href]="landmark.url" target="_blank">Visit website</a>
+      </div>
+      <h4 class="font-weight-bold mt-5">Map View</h4>
+      <agm-map *ngIf="landmark.location" [latitude]="landmark.location[1]" [longitude]="landmark.location[0]" [zoom]="15">
+        <agm-marker [latitude]="landmark.location[1]" [longitude]="landmark.location[0]"></agm-marker>
+      </agm-map>
+    </ng-container>
   </div>
-  <p> {{ landmark.description }} </p>
-  <agm-map *ngIf="landmark.location" [latitude]="landmark.location[1]" [longitude]="landmark.location[0]" [zoom]="15">
-    <agm-marker [latitude]="landmark.location[1]" [longitude]="landmark.location[0]"></agm-marker>
-  </agm-map>
-</ng-container>
+</div>

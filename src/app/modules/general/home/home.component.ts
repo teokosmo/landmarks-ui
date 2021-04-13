@@ -20,16 +20,6 @@ export class HomeComponent implements OnInit {
   constructor(private apiLandmarksService: ApiLandmarksService) { }
 
   ngOnInit(): void {
-    this.apiLandmarksService.getLandmarks().subscribe(
-      (getLandmarksResponse: IGetLandmarksResponse) => {
-        getLandmarksResponse.results.forEach(landmark => {
-          Utilities.logMsg(`HomeComponent.ngOnInit: ${landmark.title})`);
-        });
-      },
-      (err) => {
-        Utilities.logMsg(`HomeComponent.ngOnInit: ${err.message})`, Constants.logLevel.error);
-      }
-    );
   }
 
 }
