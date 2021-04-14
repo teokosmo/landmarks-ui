@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Utilities } from '@app/common/utilities';
-import { ILandmarkObject, IUploadLandmarkPhotoResponse } from '@app/models';
-import { ApiLandmarksService } from '@app/services/api';
-import { LandmarkUpdate, PhotoFile } from '@app/models/api-landmarks.model';
+import { ILandmarkObject, IUploadLandmarkPhotoResponse, IRequestResult } from '@app/models';
+import { LandmarkUpdate, PhotoFile, RequestResults } from '@app/models/api-landmarks.model';
 import { Constants } from '@app/common/constants';
+import { CoreLandmarksService } from '@app/services/core';
+import { ApiLandmarksService } from '@app/services/api';
+import { interval, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-landmark-edit',
   templateUrl: './landmark-edit.component.html',
   styleUrls: ['./landmark-edit.component.css']
 })
-export class LandmarkEditComponent implements OnInit {
+export class LandmarkEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   utils = Utilities;
   editLandmarkForm: FormGroup;
@@ -23,10 +26,14 @@ export class LandmarkEditComponent implements OnInit {
   uploadedPhotoInfo: IUploadLandmarkPhotoResponse;
   uploadPhotoErrorMessage: string;
   updateLandmarkErrorMessage: string;
+  photoFile: File;
+  landmarkObjectGetSubscription: Subscription;
+  landmarkObjectUpdateSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private coreLandmarksService: CoreLandmarksService,
     private apiLandmarksService: ApiLandmarksService,
     private formBuilder: FormBuilder
   ) { }
@@ -34,6 +41,7 @@ export class LandmarkEditComponent implements OnInit {
   get formControls(): any { return this.editLandmarkForm.controls; }
 
   ngOnInit(): void {
+    // init form
     this.editLandmarkForm = this.formBuilder.group({
       title: ['', Validators.required],
       url: [''],
@@ -42,18 +50,48 @@ export class LandmarkEditComponent implements OnInit {
       description: [''],
     });
 
-    this.landmarkObjectId = this.route.snapshot.paramMap.get('objectId');
-    // this.landmark = this.apiLandmarksService.getLandmark(this.landmarkObjectId);
-    this.apiLandmarksService.getLandmark(this.landmarkObjectId)
-      .subscribe(
-        (landmark: ILandmarkObject) => {
-          this.landmarkTitle = landmark.title;
-          this.updateFormValues(landmark);
-        },
-        (err) => {
-          Utilities.logMsg(`${err.message}`, Constants.logLevel.error);
+    // subscribe to observables
+    this.landmarkObjectGetSubscription = this.coreLandmarksService.landmarkSubject.asObservable()
+    .subscribe(
+      (landmark: ILandmarkObject) => {
+        this.landmarkTitle = landmark.title;
+        this.updateFormValues(landmark);
+      },
+      (err) => {
+        Utilities.logMsg(`${err.message}`, Constants.logLevel.error);
+      }
+    );
+    this.landmarkObjectUpdateSubscription = this.coreLandmarksService.landmarkUpdateSubject.asObservable()
+    .subscribe(
+      (updateResult: IRequestResult) => {
+        if (updateResult.result === RequestResults.SUCCESS) {
+          this.returnToLandmarkView();
+        } else if (updateResult.result === RequestResults.ERROR) {
+          this.updateLandmarkErrorMessage = updateResult.message;
+        } else {
+          Utilities.logMsg(`undefined landmark update result`, Constants.logLevel.error);
         }
-      );
+      },
+      (err) => {
+        Utilities.logMsg(`${err.message}`, Constants.logLevel.error);
+      }
+    );
+
+    // parse objectId from route
+    this.landmarkObjectId = this.route.snapshot.paramMap.get('objectId');
+  }
+
+  ngOnDestroy(): void {
+    this.landmarkObjectGetSubscription.unsubscribe();
+    this.landmarkObjectUpdateSubscription.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
+    interval(1)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.coreLandmarksService.getLandmark(this.landmarkObjectId);
+      });
   }
 
   returnToLandmarkView(): void {
@@ -67,17 +105,17 @@ export class LandmarkEditComponent implements OnInit {
 
   onPhotoChange(event: any): void {
     if (event.target.files.length > 0) {
-      const file = event.target.files[0];
+      this.photoFile = event.target.files[0];
       this.uploadedPhotoInfo = null;
       this.uploadPhotoErrorMessage = null;
-      this.editLandmarkForm.patchValue({ photo: file }); // throws following error
+      // this.editLandmarkForm.patchValue({ photo: file }); // throws following error
       // DOMException: Failed to set the 'value' property on 'HTMLInputElement':
       // This input element accepts a filename, which may only be programmatically set to the empty string.
     }
   }
 
   uploadPhoto(): void {
-    this.apiLandmarksService.uploadLandmark(this.formControls.photo.value)
+    this.apiLandmarksService.uploadLandmark(this.photoFile)
       .subscribe(
         (uploadResponse: IUploadLandmarkPhotoResponse) => {
           this.uploadedPhotoInfo = uploadResponse;
@@ -102,15 +140,7 @@ export class LandmarkEditComponent implements OnInit {
         }
       }
     });
-    this.apiLandmarksService.updateLandmark(this.landmarkObjectId, landmarkData)
-      .subscribe(
-        (updateResponse: any) => {
-          this.returnToLandmarkView();
-        },
-        (err) => {
-          this.updateLandmarkErrorMessage = err.error.error;
-        }
-      );
+    this.coreLandmarksService.updateLandmark(this.landmarkObjectId, landmarkData);
   }
 
 }

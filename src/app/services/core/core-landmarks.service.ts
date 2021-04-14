@@ -20,13 +20,13 @@ import { Constants } from '@app/common/constants';
 export class CoreLandmarksService {
   landmarksCache: ILandmarksCache;
   landmarksSubject: BehaviorSubject<ILandmarkObject[]>;
-  landmarkSubject: BehaviorSubject<ILandmarkObject>;
+  landmarkSubject: Subject<ILandmarkObject>;
   landmarkUpdateSubject: Subject<IRequestResult>;
 
   constructor(private apiLandmarksService: ApiLandmarksService){
     this.landmarksCache = {};
     this.landmarksSubject = new BehaviorSubject<ILandmarkObject[]>([]);
-    this.landmarkSubject = new BehaviorSubject<ILandmarkObject>(null);
+    this.landmarkSubject = new Subject<ILandmarkObject>();
     this.landmarkUpdateSubject = new Subject<IRequestResult>();
   }
 

@@ -22,7 +22,7 @@
               <label for="photo">Photo</label>
               <div class="form-inline">
                 <input type="file" class="form-control-file w-50" id="photo" formControlName="photo" (change)="onPhotoChange($event)">
-                <button type="button" class="btn btn-primary ml-2" (click)="uploadPhoto()" [disabled]="!formControls.photo.dirty"><i class="fas fa-upload mr-1"></i> Upload</button>
+                <button type="button" class="btn btn-primary ml-2" (click)="uploadPhoto()" [disabled]="!photoFile"><i class="fas fa-upload mr-1"></i> Upload</button>
               </div>
               <div *ngIf="uploadedPhotoInfo?.url" class="alert alert-success mt-2" role="alert">
                 Photo successfully uploaded to server, <a [href]="uploadedPhotoInfo.url" target="_blank">link</a>

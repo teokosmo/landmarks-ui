@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { IGetLandmarksResponse } from '@app/models';
-import { IGetLandmarksRequestParams } from '@app/models/api-landmarks.model';
-import { ApiLandmarksService } from '@app/services/api';
-import { Observable } from 'rxjs';
+import { ILandmarkObject } from '@app/models/landmark.model';
+import { CoreLandmarksService } from '@app/services/core';
+import { interval, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-landmarks',
@@ -11,16 +11,20 @@ import { Observable } from 'rxjs';
 })
 export class LandmarksComponent implements OnInit {
 
-  constructor(private apiLandmarksService: ApiLandmarksService) { }
+  constructor(private coreLandmarksService: CoreLandmarksService) { }
 
-  landMarks$: Observable<IGetLandmarksResponse>;
+  landMarks$: Observable<ILandmarkObject[]>;
+  noLandmarksMessage = 'Loading landmarks...';
 
   ngOnInit(): void {
-    const requestParams: IGetLandmarksRequestParams = {
-      order: 'order',
-      excludeKeys: 'description,photo,location,url'
-    };
-    this.landMarks$ = this.apiLandmarksService.getLandmarks(requestParams);
+    this.landMarks$ = this.coreLandmarksService.landmarksSubject.asObservable();
+    this.coreLandmarksService.getListOfLandmarks();
+
+    interval(2000)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.noLandmarksMessage = 'No landmarks available!';
+      });
   }
 
   trackLandmarks(index, dataItem): void {

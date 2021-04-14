@@ -1,9 +1,9 @@
 <div class="row justify-content-center p-2">
   <div class="col-lg-8 mx-auto">
     <ul class="list-group shadow">
-      <ng-container *ngIf="(landMarks$ | async) as landmarks;">
-        <ng-container *ngFor="let landmark of landmarks.results; let j = index; trackBy: trackLandmarks">
-          <li class="list-group-item">
+      <ng-container *ngIf="(landMarks$ | async) as landmarks; else nolandmarksinfo">
+        <ng-container *ngIf="landmarks.length; else nolandmarksinfo">
+          <li class="list-group-item" *ngFor="let landmark of landmarks; let j = index; trackBy: trackLandmarks">
             <div class="media align-items-lg-center flex-column flex-lg-row p-3">
               <div class="media-body align-self-start order-2 order-lg-2">
                 <h5 class="mt-0 font-weight-bold mb-2"><a [routerLink]="'/landmark/' + landmark.objectId"> {{ landmark.title }} </a></h5>
@@ -14,5 +14,6 @@
         </ng-container>
       </ng-container>
     </ul>
+    <ng-template #nolandmarksinfo>{{ noLandmarksMessage }}</ng-template>
   </div>
 </div>

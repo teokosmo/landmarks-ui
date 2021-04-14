@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ILandmarkObject } from '@app/models';
-import { ApiLandmarksService } from '@app/services/api';
-import { Observable } from 'rxjs';
+import { interval, Observable } from 'rxjs';
 import { Utilities } from '@app/common/utilities';
+import { CoreLandmarksService } from '@app/services/core';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-landmark-details',
   templateUrl: './landmark-details.component.html',
   styleUrls: ['./landmark-details.component.css']
 })
-export class LandmarkDetailsComponent implements OnInit {
+export class LandmarkDetailsComponent implements OnInit, AfterViewInit {
 
-  constructor(private route: ActivatedRoute, private apiLandmarksService: ApiLandmarksService) { }
+  constructor(private route: ActivatedRoute, private coreLandmarksService: CoreLandmarksService) { }
 
   landmarkObjectId: string;
   landmark$: Observable<ILandmarkObject>;
@@ -20,7 +21,15 @@ export class LandmarkDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.landmarkObjectId = this.route.snapshot.paramMap.get('objectId');
-    this.landmark$ = this.apiLandmarksService.getLandmark(this.landmarkObjectId);
+    this.landmark$ = this.coreLandmarksService.landmarkSubject.asObservable();
+  }
+
+  ngAfterViewInit(): void {
+    interval(1)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.coreLandmarksService.getLandmark(this.landmarkObjectId);
+      });
   }
 
 }
