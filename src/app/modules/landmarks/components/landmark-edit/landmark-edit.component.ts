@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Utilities } from '@app/common/utilities';
-import { Landmark, IUploadLandmarkPhotoResponse } from '@app/models';
+import { ILandmarkObject, IUploadLandmarkPhotoResponse } from '@app/models';
 import { ApiLandmarksService } from '@app/services/api';
 import { LandmarkUpdate, PhotoFile } from '@app/models/api-landmarks.model';
 import { Constants } from '@app/common/constants';
@@ -46,7 +46,7 @@ export class LandmarkEditComponent implements OnInit {
     // this.landmark = this.apiLandmarksService.getLandmark(this.landmarkObjectId);
     this.apiLandmarksService.getLandmark(this.landmarkObjectId)
       .subscribe(
-        (landmark: Landmark) => {
+        (landmark: ILandmarkObject) => {
           this.landmarkTitle = landmark.title;
           this.updateFormValues(landmark);
         },
@@ -60,7 +60,7 @@ export class LandmarkEditComponent implements OnInit {
     this.router.navigateByUrl('/landmark/' + this.landmarkObjectId);
   }
 
-  updateFormValues(landmark: Landmark): void {
+  updateFormValues(landmark: ILandmarkObject): void {
     Utilities.logMsg('LandmarkEditComponent.updateFormValues');
     this.editLandmarkForm.patchValue(landmark);
   }

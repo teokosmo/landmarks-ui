@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Landmark } from '@app/models';
+import { ILandmarkObject } from '@app/models';
 import { ApiLandmarksService } from '@app/services/api';
 import { Observable } from 'rxjs';
 import { Utilities } from '@app/common/utilities';
@@ -15,7 +15,7 @@ export class LandmarkDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private apiLandmarksService: ApiLandmarksService) { }
 
   landmarkObjectId: string;
-  landmark$: Observable<Landmark>;
+  landmark$: Observable<ILandmarkObject>;
   utils = Utilities;
 
   ngOnInit(): void {

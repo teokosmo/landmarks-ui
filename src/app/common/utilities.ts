@@ -47,4 +47,31 @@ export class Utilities {
     AppVariables.userSessionToken = '';
   }
 
+  static sortObjectOnProperty(
+    property: string,
+    direction: 'ASC' | 'DESC' = 'ASC'
+  ): any {
+    return (a: any, b: any) => {
+      switch (direction) {
+        case 'ASC':
+          return a[property] < b[property]
+            ? -1
+            : a[property] > b[property]
+              ? 1
+              : 0;
+        case 'DESC':
+          return a[property] > b[property]
+            ? -1
+            : a[property] < b[property]
+              ? 1
+              : 0;
+      }
+    };
+  }
+
+  static isObjectEmpty(obj): boolean {
+    obj = obj || {};
+    return Object.keys(obj).length === 0;
+  }
+
 }

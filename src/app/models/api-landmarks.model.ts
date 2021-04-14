@@ -1,9 +1,8 @@
-import { Landmark } from './landmark.model';
+import { ILandmarkObject } from './landmark.model';
 
 export interface IGetLandmarksResponse {
-  results: Landmark[];
+  results: ILandmarkObject[];
 }
-
 
 export interface IGetLandmarksRequestParams {
   order?: string;
@@ -51,4 +50,14 @@ export class LandmarkUpdate implements ILandmarkUpdate {
   photo?: PhotoFile;
 
   constructor() { }
+}
+
+export enum RequestResults {
+  SUCCESS = 'success',
+  ERROR = 'error'
+}
+
+export interface IRequestResult {
+  result: RequestResults;
+  message?: string;
 }

@@ -4,7 +4,7 @@ import { IGetLandmarksResponse, IUploadLandmarkPhotoResponse } from '@app/models
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 import { Utilities } from '@app/common/utilities';
-import { Landmark } from '@app/models/landmark.model';
+import { ILandmarkObject } from '@app/models/landmark.model';
 import { CustomHttpUrlEncodingCodec } from '@app/common/api-encoder';
 import { IGetLandmarksRequestParams, ILandmarkUpdate, ILandmarkUpdateResponse, LandmarkUpdate } from '@app/models/api-landmarks.model';
 
@@ -38,14 +38,14 @@ export class ApiLandmarksService {
     );
   }
 
-  public getLandmark(objectId: string, requestParams?: IGetLandmarksRequestParams, objectProperties?: string): Observable<Landmark> {
+  public getLandmark(objectId: string, requestParams?: IGetLandmarksRequestParams, objectProperties?: string): Observable<ILandmarkObject> {
     let requestParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
     if (Utilities.isDefined(requestParams)) {
       Object.keys(requestParams).forEach(requestParamKey => {
         requestParameters = requestParameters.set(requestParamKey, requestParams[requestParamKey]);
       });
     }
-    return this.httpClient.get<Landmark>(
+    return this.httpClient.get<ILandmarkObject>(
       `${environment.landmarksServerBaseUrl}/classes/Landmark/${objectId}`,
       {
         params: requestParameters,
