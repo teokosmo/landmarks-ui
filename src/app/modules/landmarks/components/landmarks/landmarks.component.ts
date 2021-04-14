@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Constants } from '@app/common/constants';
-import { Utilities } from '@app/common/utilities';
 import { IGetLandmarksResponse } from '@app/models';
+import { IGetLandmarksRequestParams } from '@app/models/api-landmarks.model';
 import { ApiLandmarksService } from '@app/services/api';
 import { Observable } from 'rxjs';
 
@@ -17,8 +16,11 @@ export class LandmarksComponent implements OnInit {
   landMarks$: Observable<IGetLandmarksResponse>;
 
   ngOnInit(): void {
-    const orderByField = 'order';
-    this.landMarks$ = this.apiLandmarksService.getLandmarks(orderByField);
+    const requestParams: IGetLandmarksRequestParams = {
+      order: 'order',
+      excludeKeys: 'description,photo,location,url'
+    };
+    this.landMarks$ = this.apiLandmarksService.getLandmarks(requestParams);
   }
 
   trackLandmarks(index, dataItem): void {

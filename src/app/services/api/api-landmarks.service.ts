@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Utilities } from '@app/common/utilities';
 import { Landmark } from '@app/models/landmark.model';
 import { CustomHttpUrlEncodingCodec } from '@app/common/api-encoder';
-import { ILandmarkUpdate, ILandmarkUpdateResponse, LandmarkUpdate } from '../../models/api-landmarks.model';
+import { IGetLandmarksRequestParams, ILandmarkUpdate, ILandmarkUpdateResponse, LandmarkUpdate } from '@app/models/api-landmarks.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +14,14 @@ import { ILandmarkUpdate, ILandmarkUpdateResponse, LandmarkUpdate } from '../../
 export class ApiLandmarksService {
   constructor(private httpClient: HttpClient){}
 
-  public getLandmarks(order?: string, objectProperties?: string): Observable<IGetLandmarksResponse> {
+  public getLandmarks(requestParams?: IGetLandmarksRequestParams, objectProperties?: string): Observable<IGetLandmarksResponse> {
     let requestParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
     // let requestHeaders = new HttpHeaders();
 
-    if (Utilities.isDefined(order)) {
-      requestParameters = requestParameters.set('order', order);
+    if (Utilities.isDefined(requestParams)) {
+      Object.keys(requestParams).forEach(requestParamKey => {
+        requestParameters = requestParameters.set(requestParamKey, requestParams[requestParamKey]);
+      });
     }
     // requestHeaders = requestHeaders.set('Accept', 'application/json; charset=UTF-8');
     // requestHeaders = requestHeaders.set('X-Parse-Application-Id', 'landMarksAppId');
@@ -36,10 +38,17 @@ export class ApiLandmarksService {
     );
   }
 
-  public getLandmark(objectId: string, objectProperties?: string): Observable<Landmark> {
+  public getLandmark(objectId: string, requestParams?: IGetLandmarksRequestParams, objectProperties?: string): Observable<Landmark> {
+    let requestParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+    if (Utilities.isDefined(requestParams)) {
+      Object.keys(requestParams).forEach(requestParamKey => {
+        requestParameters = requestParameters.set(requestParamKey, requestParams[requestParamKey]);
+      });
+    }
     return this.httpClient.get<Landmark>(
       `${environment.landmarksServerBaseUrl}/classes/Landmark/${objectId}`,
       {
+        params: requestParameters,
         observe: 'body',
         reportProgress: false
       }

@@ -4,6 +4,13 @@ export interface IGetLandmarksResponse {
   results: Landmark[];
 }
 
+
+export interface IGetLandmarksRequestParams {
+  order?: string;
+  keys?: string;
+  excludeKeys?: string;
+}
+
 export interface IUploadLandmarkPhotoResponse {
   url: string;
   name: string;
