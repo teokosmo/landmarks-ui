@@ -39,6 +39,7 @@ export class CoreLandmarksService {
       order: 'order',
       excludeKeys: 'description,photo,location,url'
     };
+    Utilities.showLoader();
     this.apiLandmarksService.getLandmarks(requestParams)
       .subscribe(
         (landmarksResponse: IGetLandmarksResponse) => {
@@ -49,29 +50,34 @@ export class CoreLandmarksService {
             this._cacheLastUpdateTimestamp = Date.now();
             this.landmarksSubject.next(this.getLandmarksInArray());
           }
+          Utilities.hideLoader();
         },
         (err) => {
-          Utilities.logMsg(`${err.message}`,
-           Constants.logLevel.error);
+          Utilities.logMsg(`${err.message}`, Constants.logLevel.error);
+          Utilities.hideLoader();
         }
       );
   }
 
   requestLandmark(objectId: string): void {
+    Utilities.showLoader();
     this.apiLandmarksService.getLandmark(objectId)
       .subscribe(
         (landmark: ILandmarkObject) => {
           const newLandmark = new LandmarkObject(landmark, true);
           this.landmarksCache.set(landmark.objectId, newLandmark);
           this.landmarkSubject.next(newLandmark);
+          Utilities.hideLoader();
         },
         (err) => {
           Utilities.logMsg(`${err.message}`, Constants.logLevel.error);
+          Utilities.hideLoader();
         }
       );
   }
 
   updateLandmark(objectId: string, landmarkData: LandmarkUpdate): void {
+    Utilities.showLoader();
     this.apiLandmarksService.updateLandmark(objectId, landmarkData)
       .subscribe(
         (updateResponse: ILandmarkUpdateResponse) => {
@@ -80,6 +86,7 @@ export class CoreLandmarksService {
           this.landmarkUpdateSubject.next({
             result: RequestResults.SUCCESS
           });
+          Utilities.hideLoader();
         },
         (err) => {
           Utilities.logMsg(`${err.message}`, Constants.logLevel.error);
@@ -87,6 +94,7 @@ export class CoreLandmarksService {
             result: RequestResults.ERROR,
             message: err.error.error || err.message
           });
+          Utilities.hideLoader();
         }
       );
   }

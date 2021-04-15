@@ -1,5 +1,7 @@
 import { Constants } from '@app/common/constants';
 import { environment } from '@env/environment';
+import { interval } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { AppVariables } from './app-variables';
 
 export class Utilities {
@@ -72,6 +74,22 @@ export class Utilities {
   static isObjectEmpty(obj): boolean {
     obj = obj || {};
     return Object.keys(obj).length === 0;
+  }
+
+  static showLoader(): void {
+    interval(1)
+      .pipe(take(1))
+      .subscribe(() => {
+        AppVariables.isLoaderVisible = true;
+      });
+  }
+
+  static hideLoader(): void {
+    interval(1)
+      .pipe(take(1))
+      .subscribe(() => {
+        AppVariables.isLoaderVisible = false;
+      });
   }
 
 }

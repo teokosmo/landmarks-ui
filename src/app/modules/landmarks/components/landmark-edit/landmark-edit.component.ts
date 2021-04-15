@@ -115,15 +115,18 @@ export class LandmarkEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   uploadPhoto(): void {
+    Utilities.showLoader();
     this.apiLandmarksService.uploadLandmark(this.photoFile)
       .subscribe(
         (uploadResponse: IUploadLandmarkPhotoResponse) => {
           this.uploadedPhotoInfo = uploadResponse;
           this.uploadPhotoErrorMessage = null;
+          Utilities.hideLoader();
         },
         (err) => {
           this.uploadedPhotoInfo = null;
           this.uploadPhotoErrorMessage = err.error.error || err.message;
+          Utilities.hideLoader();
         }
       );
   }
