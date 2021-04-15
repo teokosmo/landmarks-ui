@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Utilities } from '@app/common/utilities';
 import { ILandmarkObject } from '@app/models/landmark.model';
 import { CustomHttpUrlEncodingCodec } from '@app/common/api-encoder';
-import { IGetLandmarksRequestParams, ILandmarkUpdate, ILandmarkUpdateResponse, LandmarkUpdate } from '@app/models/api-landmarks.model';
+import { IGetLandmarksRequestParams, ILandmarkUpdateResponse, LandmarkUpdate } from '@app/models/api-landmarks.model';
 
 @Injectable({
   providedIn: 'root'

@@ -38,8 +38,9 @@ export interface ILandmarkUpdate {
   photo?: PhotoFile;
 }
 
-export interface ILandmarkUpdateResponse extends ILandmarkUpdate {
-  updatedAt?: string;
+export interface ILandmarkUpdateResponse {
+  updatedAt: string;
+  photo_thumb?: any;
 }
 
 export class LandmarkUpdate implements ILandmarkUpdate {

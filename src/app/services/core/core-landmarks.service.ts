@@ -1,30 +1,34 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import {
-   LandmarkObject,
-   ILandmarkObject,
-   ILandmarksCache,
-   IGetLandmarksResponse,
-   IGetLandmarksRequestParams,
-   LandmarkUpdate,
-   IRequestResult,
-   RequestResults
-} from '@app/models';
-import { ApiLandmarksService } from '../api/api-landmarks.service';
-import { Utilities } from '@app/common/utilities';
 import { Constants } from '@app/common/constants';
+import { Utilities } from '@app/common/utilities';
+import {
+  IGetLandmarksRequestParams,
+  IGetLandmarksResponse,
+  ILandmarkObject,
+  ILandmarkUpdateResponse,
+  IRequestResult,
+  LandmarkCache,
+  LandmarkObject,
+  LandmarkUpdate,
+  RequestResults,
+} from '@app/models';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { ApiLandmarksService } from '../api/api-landmarks.service';
+import { merge } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoreLandmarksService {
-  landmarksCache: ILandmarksCache;
+  landmarksCache: LandmarkCache;
   landmarksSubject: BehaviorSubject<ILandmarkObject[]>;
   landmarkSubject: Subject<ILandmarkObject>;
   landmarkUpdateSubject: Subject<IRequestResult>;
+  private _cacheValidTimePeriod = 10 * 60 * 1000; // 10 mins in milliseconds
+  private _cacheLastUpdateTimestamp = null;
 
   constructor(private apiLandmarksService: ApiLandmarksService){
-    this.landmarksCache = {};
+    this.landmarksCache = new Map();
     this.landmarksSubject = new BehaviorSubject<ILandmarkObject[]>([]);
     this.landmarkSubject = new Subject<ILandmarkObject>();
     this.landmarkUpdateSubject = new Subject<IRequestResult>();
@@ -40,8 +44,9 @@ export class CoreLandmarksService {
         (landmarksResponse: IGetLandmarksResponse) => {
           if (landmarksResponse.results) {
             landmarksResponse.results.forEach(landmark => {
-              this.landmarksCache[landmark.objectId] = new LandmarkObject(landmark);
+              this.landmarksCache.set(landmark.objectId, new LandmarkObject(landmark));
             });
+            this._cacheLastUpdateTimestamp = Date.now();
             this.landmarksSubject.next(this.getLandmarksInArray());
           }
         },
@@ -56,8 +61,9 @@ export class CoreLandmarksService {
     this.apiLandmarksService.getLandmark(objectId)
       .subscribe(
         (landmark: ILandmarkObject) => {
-          this.landmarksCache[landmark.objectId] = new LandmarkObject(landmark, true);
-          this.landmarkSubject.next(this.landmarksCache[landmark.objectId]);
+          const newLandmark = new LandmarkObject(landmark, true);
+          this.landmarksCache.set(landmark.objectId, newLandmark);
+          this.landmarkSubject.next(newLandmark);
         },
         (err) => {
           Utilities.logMsg(`${err.message}`, Constants.logLevel.error);
@@ -68,8 +74,9 @@ export class CoreLandmarksService {
   updateLandmark(objectId: string, landmarkData: LandmarkUpdate): void {
     this.apiLandmarksService.updateLandmark(objectId, landmarkData)
       .subscribe(
-        (updateResponse: any) => {
-          Object.assign(this.landmarksCache[objectId], landmarkData);
+        (updateResponse: ILandmarkUpdateResponse) => {
+          const updatedLandmark = merge(this.landmarksCache.get(objectId), landmarkData, updateResponse);
+          this.landmarksCache.set(objectId, updatedLandmark);
           this.landmarkUpdateSubject.next({
             result: RequestResults.SUCCESS
           });
@@ -78,14 +85,14 @@ export class CoreLandmarksService {
           Utilities.logMsg(`${err.message}`, Constants.logLevel.error);
           this.landmarkUpdateSubject.next({
             result: RequestResults.ERROR,
-            message: err.error.error
+            message: err.error.error || err.message
           });
         }
       );
   }
 
   getListOfLandmarks(): void {
-    if (Utilities.isObjectEmpty(this.landmarksCache)) {
+    if (this.hasLandmarksCacheExpired()) {
       this.requestLandmarks();
     } else {
       this.landmarksSubject.next(this.getLandmarksInArray());
@@ -93,8 +100,9 @@ export class CoreLandmarksService {
   }
 
   getLandmark(objectId: string): void{
-    if (this.landmarksCache[objectId] && this.landmarksCache[objectId].allKeysRetrieved) {
-      this.landmarkSubject.next(this.landmarksCache[objectId]);
+    const landmark = this.landmarksCache.get(objectId);
+    if (Utilities.isDefined(landmark) && landmark.allKeysRetrieved) {
+      this.landmarkSubject.next(landmark);
     } else {
       this.requestLandmark(objectId);
     }
@@ -109,11 +117,17 @@ export class CoreLandmarksService {
   }
 
   getLandmarksInArray(): LandmarkObject[] {
-    const landmarks: LandmarkObject[] = [];
-    Object.keys(this.landmarksCache).forEach(landmark => {
-      landmarks.push(this.landmarksCache[landmark]);
-    });
-    landmarks.sort(Utilities.sortObjectOnProperty('order'));
-    return landmarks;
+    return Array.from(this.landmarksCache.values());
+  }
+
+  hasLandmarksCacheExpired(): boolean {
+    let cacheHasExpired = true;
+    if (Utilities.isDefined(this._cacheLastUpdateTimestamp)) {
+      cacheHasExpired = (Date.now() - this._cacheLastUpdateTimestamp) > this._cacheValidTimePeriod;
+      if (cacheHasExpired) {
+        Utilities.logMsg(`CoreLandmarksService.hasLandmarksCacheExpired: Cache has expired`);
+      }
+    }
+    return cacheHasExpired;
   }
 }

@@ -38,6 +38,4 @@ export class LandmarkObject implements ILandmarkObject {
   }
 }
 
-export interface ILandmarksCache {
-  [objectId: string]: LandmarkObject;
-}
+export type LandmarkCache = Map<string, LandmarkObject>;
