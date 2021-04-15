@@ -100,7 +100,12 @@ export class LandmarkEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   updateFormValues(landmark: ILandmarkObject): void {
     Utilities.logMsg('LandmarkEditComponent.updateFormValues');
-    this.editLandmarkForm.patchValue(landmark);
+    this.editLandmarkForm.patchValue({
+      title: landmark.title,
+      url: landmark.url,
+      short_info: landmark.short_info,
+      description: landmark.description,
+    });
   }
 
   onPhotoChange(event: any): void {
