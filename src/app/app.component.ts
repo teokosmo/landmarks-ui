@@ -26,4 +26,8 @@ export class AppComponent {
         Utilities.logMsg(err.message, Constants.logLevel.error);
       });
   }
+
+  navigateToProfilePage() {
+    return false;
+  }
 }

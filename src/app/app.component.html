@@ -1,39 +1,15 @@
 <div class="loading" [ngClass]="{'d-none' : !appvars.isLoaderVisible}">Loading&#8230;</div>
 <header>
-  <nav class="navbar navbar-expand-md fixed-top navbar-dark " style="background-color: #212121;">
-    <a class="navbar-brand" routerLink="/">
-      <span class="mr-1" style="color:white">Dubai</span>
-      <img src="assets/params/images/logo/ganatan.png" width="20" height="20" alt="ganatan">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-      aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item active">
-          <a class="nav-link" routerLink="/">
-            <i class="fas fa-home mr-1"></i>home
-          </a>
-        </li>
-        <li *ngIf="!utils.isUserLoggedIn()" class="nav-item active">
-          <a class="nav-link" routerLink="/login">
-            <i class="fas fa-user mr-1"></i>Sign in
-          </a>
-        </li>
-        <li *ngIf="utils.isUserLoggedIn()" class="nav-item active">
-          <a class="nav-link" routerLink="/user">
-            <i class="fas fa-user mr-1"></i>{{ appvars.username }}
-          </a>
-        </li>
-        <li *ngIf="utils.isUserLoggedIn()" class="nav-item active">
-          <a class="nav-link" href="javascript:void(0);" (click)="logUserOut()">
-            <i class="fas fa-sign-out-alt mr-1"></i>Sign out
-          </a>
-        </li>
-      </ul>
+  <div class="navbar navbar-dark bg-dark">
+    <div class="container d-flex justify-content-between">
+      <a class="navbar-brand d-flex align-items-center" routerLink="/"><i class="fa d-inline fa-camera mr-2"></i><strong>Dubai</strong></a>
+      <a *ngIf="!utils.isUserLoggedIn()" class="nav-link" routerLink="/login"><i class="fas fa-user mr-1"></i>Sign in</a>
+      <div *ngIf="utils.isUserLoggedIn()">
+        <a class="nav-link d-inline" href="#" (click)="navigateToProfilePage()"><i class="fas fa-user mr-1"></i>{{ appvars.username }}</a>
+        <a class="nav-link d-inline" href="#" (click)="logUserOut()"><i class="fas fa-sign-out-alt mr-1"></i>Sign out</a>
+      </div>
     </div>
-  </nav>
+  </div>
 </header>
 
 <main>
@@ -42,12 +18,11 @@
   </div>
 </main>
 
-<div class="footer">
+<footer class="py-4">
   <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <p class="text-center text-white">&copy; 2020 - https://www.visitdubai.com</p>
-      </div>
-    </div>
+    <p class="float-right">
+      <a href="#">Back to top</a>
+    </p>
+    <p class="text-center">&copy; 2021 - https://www.visitdubai.com</p>
   </div>
-</div>
+</footer>
