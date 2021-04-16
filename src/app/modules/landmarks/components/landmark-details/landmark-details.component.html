@@ -1,6 +1,6 @@
 <div class="row justify-content-center p-2">
   <div class="col-lg-8 mx-auto">
-    <ng-container *ngIf="(landmark$ | async) as landmark;">
+    <ng-container *ngIf="(landmark$ | async) as landmark;else nolandmarkdata">
       <div class="d-flex justify-content-between my-4">
         <div></div>
         <h1 class="font-weight-bold">{{ landmark.title }}</h1>
@@ -22,3 +22,4 @@
     </ng-container>
   </div>
 </div>
+<ng-template #nolandmarkdata><div class="col-12" style="height: 1000px;"></div></ng-template>
