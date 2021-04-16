@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ILandmarkObject } from '@app/models/landmark.model';
 import { CoreLandmarksService } from '@app/services/core';
 import { interval, Observable } from 'rxjs';
@@ -9,18 +9,20 @@ import { take } from 'rxjs/operators';
   templateUrl: './landmarks.component.html',
   styleUrls: ['./landmarks.component.css']
 })
-export class LandmarksComponent implements OnInit {
+export class LandmarksComponent implements OnInit, AfterViewInit {
 
   constructor(private coreLandmarksService: CoreLandmarksService) { }
 
   landMarks$: Observable<ILandmarkObject[]>;
-  noLandmarksMessage = 'Loading landmarks...';
+  noLandmarksMessage = '';
 
   ngOnInit(): void {
     this.landMarks$ = this.coreLandmarksService.landmarksSubject.asObservable();
     this.coreLandmarksService.getListOfLandmarks();
+  }
 
-    interval(2000)
+  ngAfterViewInit(): void {
+    interval(500)
       .pipe(take(1))
       .subscribe(() => {
         this.noLandmarksMessage = 'No landmarks available!';
