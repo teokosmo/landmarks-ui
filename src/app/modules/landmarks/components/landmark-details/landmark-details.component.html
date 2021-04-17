@@ -8,7 +8,7 @@
       </div>
       <div class="float-left">
         <a *ngIf="landmark.photo_thumb" target="_blank" [href]="landmark.photo.url"><img class="mr-3 img-thumbnail" [src]="landmark.photo_thumb.url" alt="Generic placeholder image" width="200"></a>
-        <img *ngIf="!landmark.photo_thumb" class="mr-3 img-thumbnail" src="assets/params/images/logo/ganatan.png" alt="Generic placeholder image" width="200">
+        <img *ngIf="!landmark.photo_thumb" class="mr-3 img-thumbnail" src="assets/params/images/photo-placeholder.jpg" alt="Generic placeholder image" width="200">
       </div>
       <p class="">{{ landmark.short_info }}</p>
       <p>{{ landmark.description }}</p>
