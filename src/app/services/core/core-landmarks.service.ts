@@ -44,9 +44,13 @@ export class CoreLandmarksService {
       .subscribe(
         (landmarksResponse: IGetLandmarksResponse) => {
           if (landmarksResponse.results) {
+            // clear cache
+            this.landmarksCache = new Map();
+            // add items in cache
             landmarksResponse.results.forEach(landmark => {
               this.landmarksCache.set(landmark.objectId, new LandmarkObject(landmark));
             });
+            // set cache update timestamp
             this._cacheLastUpdateTimestamp = Date.now();
             this.landmarksSubject.next(this.getLandmarksInArray());
           }
