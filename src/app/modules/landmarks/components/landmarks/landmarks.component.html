@@ -7,7 +7,7 @@
             <div class="media align-items-lg-center flex-column flex-lg-row p-3">
               <div class="media-body align-self-start order-2 order-lg-2">
                 <h5 class="mt-0 font-weight-bold mb-2"><a [routerLink]="'/landmark/' + landmark.objectId"> {{ landmark.title }} </a></h5>
-                <p class="font-italic mb-0">{{ landmark.short_info }}</p>
+                <p class="text-justify mb-0">{{ landmark.short_info }}</p>
               </div><img class="mr-lg-5 order-1 order-lg-1 img-thumbnail" [src]="(landmark.photo_thumb ? landmark.photo_thumb.url : 'assets/params/images/photo-placeholder.jpg')" alt="Generic placeholder image" width="200">
             </div>
           </li>
